@@ -1,0 +1,73 @@
+drop database if exists consorzio;
+create database consorzio;
+use consorzio;
+
+create table if not exists clienti (
+codice int(6) primary key auto_increment,
+nome varchar(40),
+tipo int(1));
+
+create table if not exists province(
+codice int primary key auto_increment,
+sigla varchar(2),
+nome varchar(30));
+
+create table if not exists caseifici(
+codice int(4) primary key auto_increment,
+nome varchar(40),
+titolare varchar(30),
+indirizzo varchar(30),
+località varchar(30),
+telefono varchar(30),
+mail varchar(30),
+latitudine double,
+longitudine double,
+codprovincia int(2),
+psw varchar(8),
+CONSTRAINT u_caseifici UNIQUE (mail,nome),
+foreign key(codprovincia) references province(codice));
+
+create table if not exists attività(
+codice int(8) primary key auto_increment,
+data date,
+lattelavorato int(8),
+latteimpiegato int(8),
+scelta boolean,
+formeprodotte int(4),
+formevendute int(4),
+codcaseificio int(4),
+foreign key(codcaseificio) references caseifici(codice));
+
+create table if not exists forme(
+codice int(8) primary key auto_increment,
+stagionatura int(2),
+scelta int(1),
+progressivo int(8),
+anno int(4),
+mese int(2),
+codcaseificio int(4),
+codcliente int(6),
+foreign key(codcaseificio) references caseifici(codice),
+foreign key(codcliente) references clienti(codice));
+
+create table if not exists immagini(
+codice int(8) primary key auto_increment,
+pathname varchar(50),
+codcaseificio int(4),
+foreign key(codcaseificio) references caseifici(codice));
+
+insert into caseifici(nome, titolare, indirizzo, località, telefono, mail, latitudine, longitudine, psw)
+value ("Fiordilatte", "Pirla", "Via Mac Mahon", "Milano", "0223165561", "Fiordilatte@gmail.com", "45.4902238", "9.1612469", "yes");
+insert into caseifici(nome, titolare, indirizzo, località, telefono, mail, latitudine, longitudine, psw)
+value ("oud de pied", "Pirla", "Via Mac Mahon", "Milano", "0223165561", "ouddepied@gmail.com", "45.4902238", "9.1612469", "yes");
+insert into caseifici(nome, titolare, indirizzo, località, telefono, mail, latitudine, longitudine, psw)
+value ("altro nome", "Pirla", "Via Mac Mahon", "Milano", "0223165561", "altronome@gmail.com", "45.4902238", "9.1612469", "yes");
+insert into caseifici(nome, titolare, indirizzo, località, telefono, mail, latitudine, longitudine, psw)
+value ("si", "Pirla", "Via Mac Mahon", "Milano", "0223165561", "si@gmail.com", "45.4902238", "9.1612469", "yes");
+
+
+   
+
+insert into province(sigla, nome) value ("FI", "Firenze");
+insert into province(sigla, nome) value ("MI", "Milano");
+insert into province(sigla, nome) value ("NA", "Napoli");
